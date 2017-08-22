@@ -20,15 +20,17 @@ module Invitation
     #
     # @param [Hash] options - either named_by: <method name> or named: <String>
     def invitable(options = {})
-      has_many :invites, as: :invitable
+
+      has_many :invites, {:as => :invitable}.update(options.slice!(:named_by, :named))
+
       class_attribute :invitable_options
-      self.invitable_options = {}
-      case
-      when options[:named_by] then invitable_options[:named_by] = options[:named_by]
-      when options[:named] then invitable_options[:named] = options[:named]
-      else raise 'invitable requires options be set, either :name or :named_by. \
-                 e.g.: `invitable named: "string"` or `invitable named_by: :method_name`'
+      self.invitable_options = options
+      
+      if invitable_options.blank?
+        raise 'invitable requires options be set, either :name or :named_by. \
+          e.g.: `invitable named: "string"` or `invitable named_by: :method_name`'
       end
+
       include Invitation::Invitable::InstanceMethods
     end
 

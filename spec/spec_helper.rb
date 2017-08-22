@@ -1,6 +1,8 @@
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 ENV['RAILS_ENV'] ||= 'test'
 
+require 'pry'
+
 require File.expand_path('../dummy/config/environment.rb', __FILE__)
 
 # nasty hacky catch of environment data wiped out by tests run in rails 4 via appraisal
